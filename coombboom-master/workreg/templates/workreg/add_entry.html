@@ -1,0 +1,121 @@
+{% extends 'base.html' %} {% block content %}
+
+
+
+    <div class="container">
+        <div class="bg-transparent">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Timeregistrering</h1>
+            </div>
+            <form class="user" method="post" id="workregForm" data-projects-url="{% url 'workreg:ajax_load_tasks' %}">
+                {% csrf_token %} {% comment %} {{ form.as_p }} {% endcomment %}
+
+                <div class="mb-4">
+                    <input type="text" name="place" class="form-control form-control-user bg-gradient-dark-highlight"
+                           placeholder="Sted" maxlength="100" required="" id="id_place"/>
+                </div>
+                <div class="mt-3 mb-4">
+        <textarea name="comment" cols="40" rows="1" class="form-control bg-gradient-dark-highlight"
+                  placeholder="Kommentar" maxlength="255" required="" id="id_comment"></textarea>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label for="id_start_date">Start date:</label>
+                        <input class="form-control" type="date" name="start_date" value="" required=""
+                               id="id_start_date"/>
+                        <input class="form-control" type="hidden" name="initial-start_date" value=""
+                               id="initial-id_start_date"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="id_end_date">End date:</label>
+                        <input class="form-control" type="date" name="end_date" required="" id="id_end_date"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label for="id_from_time">From time:</label>
+                        <input class="form-control" type="time" name="from_time" required="" id="id_from_time"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="id_end_time">End time:</label>
+                        <input class="form-control" type="time" name="end_time" required="" id="id_end_time"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label for="id_project">Velg prosjekt:</label>
+                        <select class="selectpicker" data-style="btn-select-color-custom" title="Ingenting valgt"
+                                name="project" id="id_project"
+                                data-container="body" data-live-search="true">
+                            {% for project in projects %}
+                                <option value="{{ project.pk }}">{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="id_task">Velg oppgave:</label>
+                        <select class="selectpicker" data-style="btn-select-color-custom" title="Ingenting valgt"
+                                name="task" required="" id="id_task"
+                                data-container="body" data-live-search="true">
+                            {% for task in tasks %}
+                                <option value="{{ task.pk }}">{{ task.task_name }}</option>
+                            {% endfor %}
+                            <optgroup label="Global Tasks">
+                                {% for task in global_tasks %}
+                                    <option value="{{ task.pk }}">{{ task.task_name }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                {% for error in form.tasks.errors %}
+                    <div class="form-group">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>{{ error }}</strong>
+                        </div>
+                    </div>
+                {% endfor %} {% for error in form.projects.errors %}
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>{{ error }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
+                <br/>
+                <div class="form-group mt-3">
+                    <button class="btn btn-primary btn-user btn-block" type="submit">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        jQuery("#id_project").change(function () {
+            let select_ungrouped_children = $("#id_task").children().not('optgroup')
+            select_ungrouped_children.remove()
+            const url = $("#workregForm").attr("data-projects-url"); // get the url of the `load_cities` view
+            const projectID = $(this).val(); // get the selected country ID from the HTML input
+            $.ajax({
+                // initialize an AJAX request
+                url: url, // set the url of the request (= /persons/ajax/load-cities/ )
+                data: {
+                    project_id: projectID, // add the country id to the GET parameters
+                },
+                success: function (data) {
+                    // `data` is the return of the `load_cities` view function
+                    $("#id_task").append(data);
+                    $("#id_task").selectpicker('refresh');
+                },
+            });
+        });
+        jQuery("#id_task").change(function (){
+            let selected = $("option:selected", this);
+            if(selected.parent()[0].id === 'global_tasks'){
+                $("#id_project").selectpicker('val', '')
+                $("#id_task").children().not('optgroup').remove()
+            }
+        });
+    </script>
+{% endblock %}

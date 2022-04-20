@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div class="bg-transparent">
+    <div class="text-center">
+      <h1 class="h4 text-gray-900 mb-4">Groups</h1>
+    </div>
+    <div class="list-group">
+      {% for group in groups %}
+      <a href="change_group?id={{ group.id }}" class="list-group-item list-group-item-action">{{ group.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock %}
+</div>

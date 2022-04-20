@@ -1,0 +1,56 @@
+{% load dashboard_extras %}
+<table id="table_id" class="display">
+<h3 class="text-center"> Timer registrert for {{ tableType }} </h3>
+ <hr class="my-4 spacer-datatable"/>
+
+    <thead>
+        <tr>
+            <th>Kommentar</th>
+            <th>Sted</th>
+            <th>Start</th>
+            <th>Slutt</th>
+            <th>Tid brukt</th>
+            <th>Fra</th>
+            <th>Til</th>
+            <th>Bruker</th>
+            <th>Oppgave</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for reg in workreg %}
+        <tr>
+            <td class="data-table-cell"> {{ reg.comment }}</td>
+            <td class="data-table-cell"> {{ reg.place }}</td>
+            <td class="data-table-cell"> {{ reg.start_date}}</td>
+            <td class="data-table-cell"> {{ reg.end_date }}</td>
+            <td class="data-table-cell"> {{ reg.time_spent }}</td>
+            <td class="data-table-cell"> {{ reg.from_time }}</td>
+            <td class="data-table-cell"> {{ reg.end_time }}</td>
+            <td class="data-table-cell"> {{ reg.user_id|user_name }}</td>
+            <td class="data-table-cell"> {{ reg.task_id|task_name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready( function () {
+    $('#table_id').DataTable({
+        "language": {
+            "lengthMenu": "Vis _MENU_ per side",
+            "zeroRecords": "Ingenting funnet",
+            "info": "Side _PAGE_ av _PAGES_",
+            "infoEmpty": "Ingen data tilgjengelig",
+            "infoFiltered": "(filtrert fra _MAX_ oppføringer)",
+            "search":         "Søk:",
+            "paginate": {
+            "first":      "Første",
+            "last":       "Siste",
+            "next":       "Neste",
+            "previous":   "Forrige"
+            },
+        }
+        });
+} );
+</script>

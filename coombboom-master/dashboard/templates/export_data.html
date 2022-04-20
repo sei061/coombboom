@@ -1,0 +1,82 @@
+<div class="row float-right">
+    <button class="btn btn-primary mr-2" onclick="getData()" type="submit">Export CSV</button>
+
+    <button class="btn btn-primary" id="btnprintpdf" type="submit">Export PDF</button>
+</div>
+
+<script>
+
+    $('#btnprintpdf').on('click', function(event) {
+        event.preventDefault();
+
+        var opt = {
+          margin:       15,
+          filename:     'dashboard.pdf',
+          image:        { type: 'png', quality: 0.98 },};
+
+        html2pdf().set(opt).from(document.querySelector('#myChart')).toPdf().get('pdf').then(function (pdf) {
+            pdf.addPage();
+        }).from(document.querySelector('#taskList')).toContainer().toCanvas().toPdf().save();
+
+        {#var elementToPrint = document.createElement('div');#}
+        {#elementToPrint.appendChild(document.querySelector('.dashboardGraphTitle').cloneNode(true));#}
+        {#elementToPrint.appendChild(document.querySelector('#myChart').cloneNode(true));#}
+        {##}
+        {#let chart = document.querySelector('.pdfExport')#}
+
+
+        {#html2pdf(elementToPrint, opt);#}
+    })
+
+</script>
+
+<script>
+    function getData(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        let url = 'ajax_load_team';
+        if($("#project").length > 0){
+            url = 'ajax_load_project'
+        }
+        let ajax_data
+        $.ajax({
+        // initialize an AJAX request
+        url: url, // set url, is group/perm_to_group/ajax/load-group-info
+        data: {
+          id: id, // add group selected to GET Parm
+        },
+        success: function (data) {
+          // `data` is the return of the `load_cities` view function
+          ajax_data = JSON.parse(JSON.stringify(data));
+
+          let labels = ajax_data.labels;
+          let ideal_line = ajax_data.ideal_line;
+          let actual_line = ajax_data.actual_line;
+          let goal_line = ajax_data.goal_line;
+          let tasks = ajax_data.tasks;
+          let workreg = ajax_data.workreg;
+          let filename = ajax_data.name;
+
+          let csv = 'Burnup Graf: ' + labels + "\n";
+          csv += "   Planlagt, " +ideal_line + "\n";
+          csv += "   Mål, " + goal_line + "\n";
+          csv += "   Ferdig, " + actual_line + "\n";
+          csv += "\nOppgaver: Navn, tid_igjen, planlagt_tid, status, start_dato, slutt_dato \n";
+          tasks.forEach(function(row) {
+             csv += "   "+row + "\n";
+          });
+          csv += "\nTimeregistrering: Kommentar, sted, start_dato, slutt_dato, tid_brukt, fra_tid, til_tid, forfatter_navn, oppgave_navn  \n"
+          workreg.forEach(function(row){
+             csv += "   "+row + "\n";
+          });
+            let hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'export-' + filename +'.csv';
+            hiddenElement.click();
+        },
+      });
+
+    }
+</script>

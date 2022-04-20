@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+    <div class="bg-transparent">
+        <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-4">Projects</h1>
+        </div>
+        <div class="list-group">
+            {% for project in projects %}
+            <a href="change_project?id={{ project.id }}"
+                class="list-group-item list-group-item-action">{{ project.name }}</a>
+            {% for task in tasks %}
+
+            {% if project.id == task.projects_id %}
+            <a href="view_project?id={{ task.id }}"
+                class="list-group-item list-group-item-action">{{ task.task_name }}</a>
+            {% endif %}
+            {% endfor %}
+            <br><br>
+            {% endfor %}
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

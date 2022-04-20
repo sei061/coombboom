@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="h4 text-gray-900 mb-4">Velg bruker som skal slettes</h1>
+
+<form class="user" method="post" name="display">
+    {% csrf_token %}
+
+    <div>
+        <select name="task_id" class="form-control form-control-file bg-gradient-dark-highlight"
+                required>
+            <option selected disabled>--Velg bruker--</option>
+
+            {% for user in all_tasks %}
+                {% if user.is_admin == 0 %}
+                <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+
+    </div>
+
+    &nbsp;
+
+    <button id="button"
+            class="btn btn-primary btn-user btn-block"
+            type="submit" name="button" value="delete"
+    >
+        Slett
+    </button>
+
+</form>
+<hr/>
+
+{% endblock %}

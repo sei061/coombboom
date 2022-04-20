@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+    <div class="bg-transparent">
+        <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-4">Projects</h1>
+        </div>
+        <div class="list-group">
+            {% for project in projects %}
+            <a href="project?id={{ project.id }}"
+                class="list-group-item list-group-item-action">{{ project.name }}</a>
+            <br><br>
+            {% endfor %}
+        </div>
+    <h1 class="text-center h4 text-gray-900 mb-4 mt-4"> Teams </h1>
+    <div class="list-group">
+      {% for group in groups %}
+      <a href="team?id={{ group.id }}" class="list-group-item list-group-item-action">{{ group.name }}</a>
+      {% endfor %}
+    </div>
+    </div>
+</div>
+{% endblock %}

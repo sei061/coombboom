@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="h4 text-gray-900 mb-4">Er du sikker på at du vil slette denne brukeren?</h1>
+<form class="user" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <input type="hidden"
+               name="user_id"
+               value="{{ user_data.id }}"
+        />
+
+    </div>
+
+     <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <input
+                    type="text"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_first_name"
+                    name="first_name"
+                    disabled
+                    value="{{ user_data.first_name }}"
+            />
+        </div>
+        <div class="col-sm-6">
+            <input
+                    type="text"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_last_name"
+                    name="last_name"
+                    value="{{ user_data.last_name }}"
+                    disabled
+            />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_email"
+                name="email"
+                required=""
+                value="Brukernavn: {{ user_data.username }}"
+                disabled
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="email"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_email"
+                name="email"
+
+                value="Email: {{ user_data.email }}"
+                disabled
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_employer_id"
+                name="employer_id"
+                disabled
+                value="Ansattnr: {{ user_data.employer_id }}"
+
+        />
+    </div>
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_phone_number"
+                name="phone_number"
+                disabled
+                value="Telefon: {{ user_data.phone_number }}"
+
+        />
+    </div>
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_why_deleted"
+                name="why_deleted"
+                required
+                placeholder="Hvorfor"
+
+        />
+    </div>
+
+    <button id="button"
+            class="btn btn-primary btn-user btn-block"
+            type="submit" name="button" value="confirm"
+    >
+        Slett
+    </button>
+</form>
+<hr/>
+
+{% endblock %}

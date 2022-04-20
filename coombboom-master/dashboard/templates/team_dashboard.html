@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/helpers.esm.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.esm.min.js"></script>
+    <script id="max_points_y_axis" type="application/json">
+    {{max_y_points|safe}}
+    </script>
+    <script id="labels_for_x" type="application/json">
+    {{labels_for_x|safe}}
+  </script>
+    <script id="ideal_line_arr" type="application/json">
+    {{ideal_line_arr|safe}}
+  </script>
+    <script id="goal_line_arr" type="application/json">
+    {{goal_line_arr|safe}}
+  </script>
+<div class="container">
+  <div class="bg-transparent">
+    <div class="text-center">
+      <h1 class="h4 text-gray-900 mb-4">Team Burnup Graf</h1>
+    </div>
+    <div class="text-center row">
+      <canvas id="myChart" width="800" height="600"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    const ideal_line = JSON.parse(document.getElementById("ideal_line_arr").textContent)
+    const goal_line = JSON.parse(document.getElementById("goal_line_arr").textContent)
+    const actual_line = {{actual_line_arr|safe}}
+    const labels_for_x = {{ labels_for_x|safe}}
+  new Chart(document.getElementById("myChart"), {
+    type: "line",
+    data: {
+      labels: labels_for_x,
+      datasets: [{
+          data: actual_line,
+          label: "Actual",
+          borderColor: "#992632",
+          fill: true,
+        },
+        {
+          data: goal_line,
+          label: "Goal",
+          borderDash: [10, 5],
+          borderColor: "#2AAB44",
+          fill: false,
+        },
+        {
+          data: ideal_line,
+          label: "Ideal",
+          borderColor: "#3892C6",
+          borderDash: [10, 5],
+          fill: false,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        padding: 10,
+        text: "Burn down",
+      },
+        scales: {
+              x: {
+                grid: {
+                  color: "#1c1c1c",
+                }
+              },
+            y:{
+                  max: {{ max_y_points|safe }}+10,
+                  grid:{
+                      color: "#1c1c1c",
+                  }
+            }
+            }
+    },
+  });
+</script>
+{% endblock %}

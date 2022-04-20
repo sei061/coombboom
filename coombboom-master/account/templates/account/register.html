@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="h4 text-gray-900 mb-4">Registrering av bruker</h1>
+
+<form class="user" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <input
+                type="email"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_email"
+                name="email"
+                required=""
+                value="{{ email }}"
+                placeholder="Epost"
+                readonly
+        />
+    </div>
+
+    {% for error in form.email.errors %}
+    <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ error }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <input
+                    type="text"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_first_name"
+                    name="first_name"
+                    required=""
+                    placeholder="Fornavn"
+            />
+        </div>
+
+        <div class="col-sm-6">
+            <input
+                    type="text"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_last_name"
+                    name="last_name"
+                    required=""
+                    placeholder="Etternavn"
+            />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_employer_id"
+                name="employer_id"
+                required=""
+                placeholder="Arbeidsgiver id"
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_phone_number"
+                name="phone_number"
+                required=""
+                placeholder="Telefon"
+        />
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <input
+                    type="password"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_password1"
+                    name="password1"
+                    required=""
+                    placeholder="Passord"
+            />
+        </div>
+
+        <div class="col-sm-6">
+            <input
+                    type="password"
+                    class="form-control form-control-user bg-gradient-dark-highlight"
+                    id="id_password2"
+                    name="password2"
+                    required=""
+                    placeholder="Gjenta passord"
+            />
+
+        </div>
+
+    </div>
+    {% for error in form.password2.errors %}
+    <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ error }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+
+    <button
+            class="btn btn-primary btn-user btn-block"
+            type="submit"
+    >
+        Registrer
+    </button>
+</form>
+<hr/>
+<div class="text-center">
+    <a class="small" href="forgot-password">Glemt passord?</a>
+</div>
+<div class="text-center">
+    <a class="small" href="login"
+    >Har du allerede bruker? Logg inn!</a
+    >
+</div>
+
+
+{% endblock %}

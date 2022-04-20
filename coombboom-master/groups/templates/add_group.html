@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div class="bg-transparent">
+    <div class="text-center">
+      <h1 class="h4 text-gray-900 mb-4">Legg til Team</h1>
+    </div>
+    <form class="user" method="post">
+      {% csrf_token %}
+      <div>
+        <input type="text" class="form-control form-control-user bg-gradient-dark-highlight" id="name" name="name"
+          required="" placeholder="Team name" />
+      </div>
+      {% for error in form.user.errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+      <br />
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <select class="selectpicker" data-style="btn-select-color-custom" title="Select Users" type="number" name="users" data-container="body" multiple
+            data-live-search="true">
+            {% for user in users %}
+            <option value="{{ user.id }}">
+              {{ user.first_name }} {{ user.last_name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-6 text-lg-right">
+          <select class="selectpicker" data-style="btn-select-color-custom" title="Select Project" type="number" name="projects" id="id_projects" multiple
+            data-container="body" data-live-search="true">
+            {% for project in projects %}
+            <option value="{{ project.pk }}">{{ project.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-group pt-xl-5 col-xl-12 align-bottom">
+          <button class="btn btn-primary btn-user btn-block" type="submit">
+            Create
+          </button>
+        </div>
+      </div>
+      {% for error in form.non_field_errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endfor %} {% if error %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endif %}
+    </form>
+    <hr />
+  </div>
+</div>
+{% endblock %}

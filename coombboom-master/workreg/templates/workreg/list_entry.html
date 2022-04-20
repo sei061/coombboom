@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row-cols-lg-1">
+        {% for obj in lists %}
+            {% if user.is_authenticated %}
+                {% if user.id == obj.user_id %}
+                    {% if obj.is_deleted == False %}
+                        <div class="card shadow px-3 mb-3 bg-gradient-dark-highlight rounded">
+                            <div class="card-header bg-gradient-dark-highlight">
+                                <form action="{% url 'workreg:delete_workreg' obj.id %}"  method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input class="btn btn-primary" id="close_bid_button" type="submit"
+                                               value="Slett">
+                                    </div>
+                                </form>
+                                <div class="row">
+                                    <div class="px-1 col-lg-6 col-md-10">
+                                        <small>{{ forloop.counter }} -</small>
+                                        <b>Oppgave:</b> {{ obj.task }}
+                                    </div>
+                                    <div class="col-lg-6 col-md-3">
+                                        <p><b>Dato:</b> <small>{{ obj.start_date }}</small></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card-body px-3 bg-gradient-dark-highlight">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-3">
+                                        <p><b>Starttid:</b> <small>{{ obj.from_time }}</small></p>
+                                    </div>
+                                    <div class="col-lg-6 col-md-3">
+                                        <p><b>Sluttid:</b> <small>{{ obj.end_time }}</small></p>
+                                    </div>
+                                    <div class="col-lg-6 col-md-3">
+                                        <p><b>Tid brukt:</b> <small>{{ obj.time_spent }} timer</small></p>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <p><b>Sted:</b> <small>{{ obj.place }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-3">
+                                        <p><b>Prosjekt:</b> <small class="badge badge-info">{{ obj.project }}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,150 @@
+<div class="col-2 flex-grow-1 collapse navbar-dark navbar-collapse bg-color-dark-blue menu-shadow-inset"
+     id="navbarCollapse">
+    <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item active py-4">
+            <div class="container bg-color-dark-red card border-0 text-center text-size-profile-link">
+                <a class="nav-link" href="{% url 'account:profile' %}">{{ user.first_name }} {{ user.last_name }}</a>
+            </div>
+        </li>
+        {% else %}
+        &nbsp;
+        <li class="nav-item active">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'account:login' %}">Login</a>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    <ul class="navbar-nav mr-auto">
+        {% if user.is_authenticated %}
+        <li class="nav-item active pb-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'dashboard:' %}">Dashboard</a>
+            </div>
+        </li>
+        <li class="nav-item active pb-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'workreg:entry-list' %}">Dine registreringer</a>
+            </div>
+        </li>
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'workreg:entry-add' %}">Legg til timeregistrering</a>
+            </div>
+        </li>
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'groups.edit_members_group' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:new_team' %}">Legg til team</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'account.assign_create_project' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:new_project' %}">Legg til prosjekt</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'groups.add_task_perm' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'task:create_task' %}">Legg til oppgave</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'groups.handout_add_perm_group' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:add permission group' %}">Legg til rettighetsgruppe</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'account.assign_create_group' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:assign_perm_user' %}">Legg rettighet til bruker</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'account.delete_user' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'account:delete user' %}">Slett brukere</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'groups.view_project' and not user.is_superuser %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:view projects objects' %}">Prosjektoversikt</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'groups.view_group' and not user.is_superuser %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:view group objects' %}">Grupper</a>
+            </div>
+        </li>
+        {% endif %}
+        {% if forloop.last and user.is_superuser %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:view group objects' %}">Grupper</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'groups:Add perm to group' %}">Administrer team rettigheter</a>
+            </div>
+        </li>
+
+
+        {% endif %}
+        {% for perm in user.get_all_permissions %}
+        {% if perm == 'invitation.add_invitations' %}
+        <li class="nav-item active py-1">
+            <div class="container bg-color-dark-blue-highlight card border-0">
+                <a class="nav-link" href="{% url 'invitation' %}">Send invitasjonslink</a>
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    </ul>
+    {% if user.is_authenticated %}
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <div class="container bg-color-dark-blue-highlight card border-0 text-center mt-5">
+                <a class="nav-link" href="{% url 'account:logout' %}">Logout</a>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+</div>

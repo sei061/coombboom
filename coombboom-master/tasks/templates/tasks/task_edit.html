@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="text-center">
+    <h1 class="h4 text-gray-900 mb-4">Endring av oppgave</h1>
+</div>
+<form class="user" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <input type="hidden"
+               name="task_id"
+               value="{{ info_task.id }}"
+        />
+
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="id_task_name"
+                name="task_name"
+                required=""
+                placeholder="Navn på oppgaven"
+                value="{{ info_task.task_name }}"
+                {% if only_update_select_fields %}
+                    disabled
+                {% endif %}
+        />
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <input class="form-control form-control-user bg-gradient-dark-highlight"
+                   placeholder="Forventet start:"
+                   disabled>
+        </div>
+        <div class="col-sm-7 mb-3 mb-sm-0">
+            <input
+                    type="date"
+                    class="form-control  form-control-user bg-gradient-dark-highlight"
+                    id="start_date"
+                    name="start_date"
+                    required
+                    value={{ info_task.start_date|date:" Y-m-d" }}
+                    {% if only_update_select_fields %}
+                        disabled
+                    {% endif %}
+            />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <input class="form-control form-control-user bg-gradient-dark-highlight"
+                   placeholder="Forventet tid:"
+                   disabled>
+        </div>
+        <div class="col-sm-7 mb-3 mb-sm-0">
+            <input
+                    type="number"
+                    class="form-control  form-control-user bg-gradient-dark-highlight"
+                    id="expected_time"
+                    name="expected_time"
+                    value="{{ info_task.expected_time }}"
+                    required
+            />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <input class="form-control form-control-user bg-gradient-dark-highlight"
+                   placeholder="Forventet ferdig:"
+                   disabled>
+        </div>
+        <div class="col-sm-7 mb-3 mb-sm-0">
+            <input
+                    type="date"
+                    class="form-control  form-control-user bg-gradient-dark-highlight"
+                    id="est_time"
+                    name="est_time"
+                    required
+                    {% if only_update_select_fields %}
+                        disabled
+                    {% endif %}
+                    value={{ info_task.est_time|date:" Y-m-d" }}
+
+            />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-5 mb-3 mb-sm-0">
+            <select class="selectpicker" id="id_projects" data-style="btn-select-color-custom" title="Prosjekt"
+                    type="number" name="projects" data-live-search="true"
+            {% if only_update_select_fields %}
+                        disabled
+                    {% endif %}>
+                <option value="">Global oppgave</option>
+                {% for group in all_projects %}
+                <option value="{{ group.id }}">{{ group.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-sm-7 mb-3 mb-sm-0">
+            <select class="form-control form-control-file bg-gradient-dark-highlight"
+                    id="id_task_status"
+                    name="task_status"
+                    required
+            >
+                <option value="{{ info_task.task_status }}" selected disabled>{{ info_task.task_status }}</option>
+                <option value="Ikke Startet">Ikke påbeynt</option>
+                <option value="Påbegynt">Påbegynt</option>
+                <option value="Ferdig">Ferdig</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <button id="button"
+                class="btn btn-primary btn-user btn-block"
+                type="submit" name="button" value="alter"
+        >
+            Endre
+        </button>
+    </div>
+    &nbsp;
+    <div class="text-center">
+        <a class="small" href="display">Tilbake</a>
+    </div>
+
+</form>
+<hr/>
+<script>
+    jQuery(document).ready(function () {
+      const current_project = {{ current_project|safe }};
+      if(current_project !==  0){
+          $("#id_projects").selectpicker('val', current_project);
+      }
+    });
+
+</script>
+{% endblock %}

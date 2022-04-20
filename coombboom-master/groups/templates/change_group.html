@@ -1,0 +1,96 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div class="bg-transparent">
+    <div class="text-center">
+      <h1 class="h4 text-gray-900 mb-4">Change group</h1>
+    </div>
+    <form class="user" method="post">
+      {% csrf_token %}
+      <div>
+        <input type="text" class="form-control form-control-user bg-gradient-dark-highlight" id="name" name="name"
+          required="" placeholder="Team name" value="{{ group.name }}" />
+      </div>
+      {% for error in form.user.errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+      <br />
+      <div class="form-group text-lg-center">
+        <select class="selectpicker" data-style="btn-select-color-custom" title="Select Users" type="number" name="users" id="id_users" multiple
+          data-container="body" data-live-search="true">
+          {% for user in users %}
+          <option value="{{ user.id }}">
+            {{ user.first_name }} {{ user.last_name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group text-lg-center">
+        <select class="selectpicker" data-style="btn-select-color-custom" title="Select Projects" type="number" name="projects" id="id_projects" multiple
+          data-container="body" data-live-search="true">
+          {% for project in projects %}
+          <option value="{{ project.pk }}">{{ project }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <input type="hidden" value="{{ group.id }}" name="id_group" />
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-user btn-block" type="submit">
+          Change
+        </button>
+      </div>
+      {% for error in form.non_field_errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endfor %} {% if error %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endif %}
+    </form>
+    <hr />
+    {% comment %} {% if toast %}
+    <div class="alert alert-success form-group text-center" role="alert">
+      {{ toast }}
+    </div>
+    {% endif %} {% endcomment %}
+  </div>
+
+  <!-- Jquery to select values automatically -->
+  <!-- https://docs.djangoproject.com/en/dev/ref/templates/builtins/#json-script -->
+  {{ users_in_grp|json_script:"user-select-data" }}
+  {{ project_member|json_script:"team-project-membership-data" }}
+  <script id="user-select-data" type="application/json">
+    {
+      "id"
+    }
+  </script>
+  <script id="team-project-membership-data" type="application/json">
+    {
+      "id"
+    }
+  </script>
+  <script>
+    jQuery(document).ready(function () {
+      const select_users = JSON.parse(
+        document.getElementById("user-select-data").textContent
+      );
+      const select_projects = JSON.parse(
+        document.getElementById("team-project-membership-data").textContent
+      );
+      $("#id_users").selectpicker("val", select_users);
+      $("#id_projects").selectpicker("val", select_projects);
+    });
+  </script>
+</div>
+{% endblock %}

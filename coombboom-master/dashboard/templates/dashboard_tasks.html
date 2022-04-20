@@ -1,0 +1,56 @@
+
+    <div class="page-todo bootstrap snippets bootdeys" id="taskList">
+        <div class="text-center">
+            <h1 class="h4 text-gray-900 mb-1">Oppgaver</h1>
+        </div>
+            {% if percent_done %}
+            <div class="row-cols-1 mt-5">
+                      <div class="progress">
+                        <div class="progress-bar text-right pr-1" role="progressbar" style="width: {{ percent_done }}%" aria-valuenow="{{ percent_done }}"
+                          aria-valuemin="0" aria-valuemax="100">
+                            {{ percent_done }}%
+                        </div>
+                      </div>
+                </div>
+            {% endif %}
+	    <div class="task-list data-task-list mt-4">
+            {%  for task in tasks %}
+                {% if not forloop.last %}
+                    <a class="link-task-list" href="/tasks/update_estimate?id={{ task.id }}">
+                    <div class="task high">
+                        <div class="desc">
+                            <div class="title">{{ task.task_name }}</div>
+                            <div>Gjenstående tid: {{ task.expected_time|floatformat:1 }} t
+                                <div class="mb-0"></div>
+                                 Tid planlagt: {{ task.original_time }} t</div>
+                                 Status: {{ task.task_status }}
+                    </div>
+                        <div class="time">
+                            <div class="date">{{ task.start_date }}</div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </a>
+                {% endif %}
+                {% if forloop.last %}
+                    <a class="link-task-list" href="/tasks/update_estimate?id={{ task.id }}">
+                    <div class="task high last">
+                        <div class="desc">
+                            <div class="title">{{ task.task_name }}</div>
+                            <div>
+                                Gjenstående tid: {{ task.expected_time|floatformat:1 }} t
+                                <div class="mb-0"></div>
+                                 Planlagt tid: {{ task.original_time }} t</div>
+                                 Status: {{ task.task_status }}
+                        </div>
+                        <div class="time">
+                            <div class="date">{{ task.start_date }}</div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+		<div class="clearfix"></div>
+        </div>
+      </div>

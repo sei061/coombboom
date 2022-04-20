@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="bg-transparent">
+    <div class="text-center">
+      <h1 class="h4 text-gray-900 mb-4">Manage Group Permissions</h1>
+    </div>
+    <form class="user" method="post">
+      {% csrf_token %}
+      {% for error in form.name.errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="row-cols-1">
+        <select class="selectpicker" data-style="btn-select-color-custom" title="Select Group to manage" type="number" name="group_to_edit"
+          id="id_group_to_edit" data-container="body" data-live-search="true"
+          data-group-info-url="ajax/load-group-info">
+          {% for group in groups %}
+          <option value="{{ group.pk }}">{{ group.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mt-3"></div>
+      <div class="row-cols-1">
+        <select class="selectpicker" data-style="btn-select-color-custom" title="Select global permissions" type="number" name="all_perms" multiple
+          id="id_all_perms" data-container="body" data-live-search="true">
+          {% for perm in perms %}
+          <option value="{{ perm.pk }}">{{ perm.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mt-4"></div>
+      <!--
+          <div class="form-group row">
+            <div class="col-sm-6">
+                <select
+                    class="selectpicker"
+                    title="Select Group"
+                    type="number"
+                    name="group"
+                    multiple
+                    data-container="body"
+                    data-live-search="true"
+                >
+                {% for group in groups %}
+                <option value="{{ group.id }}">
+                  {{ group.name }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-sm-6 text-lg-right">
+                <select
+                    class="selectpicker"
+                    title="Select permissions"
+                    type="number"
+                    name="perms"
+                    multiple
+                    data-container="body"
+                    data-live-search="true"
+                  >
+                {% for perm in groupPerms %}
+                <option value="{{ perm.pk }}">{{ perm.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div> -->
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <select class="selectpicker" data-style="btn-select-color-custom" title="Select Project" type="number" name="projects" id="id_projects"
+            data-container="body" data-live-search="true">
+            {% for project in projects %}
+            <option value="{{ project.pk }}">
+              {{ project.name }}
+            </option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <div class="col-sm-6 text-lg-right">
+          <select class="selectpicker" data-style="btn-select-color-custom" title="Select permissions" type="number" name="projectPerms" id="id_projectPerms"
+            multiple data-container="body" data-live-search="true">
+            {% for perm in projectPerms %}
+            <option id="{{ perm.pk }}" value="{{ perm.pk }}">{{ perm.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group pt-xl-5 col-xl-12 align-bottom">
+        <button class="btn btn-primary btn-user btn-block" type="submit">
+          Submit
+        </button>
+      </div>
+      {% for error in form.non_field_errors %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+
+      {% endfor %}
+
+      {% if error %}
+      <div class="form-group">
+        <div class="alert alert-danger" role="alert">
+          <strong>{{ error }}</strong>
+        </div>
+      </div>
+      {% endif %}
+    </form>
+    <hr />
+  </div>
+</div>
+<script>
+  jQuery(document).ready(function () {
+    let selectedGroup = $()
+    let ajax_data = null
+    // When something is selected in projects selector:
+    $("#id_projects").change(function () {
+      //set selected project
+      let selectedProject = $(this).children("option:selected").val();
+      // initialize arr
+      let value_arr = null;
+      // when this.function.change de-select because we are selecting new option
+      $('#id_projectPerms').selectpicker('deselectAll', 'refresh');
+      //loop through object
+      $.each(ajax_data, function (key, value) {
+        $.each(value, function (key, value) {
+          if (key === selectedProject) { // if key (project ID) == selectedproject (project ID)
+            let value_from_arr = value.replace(/[^0-9$.,]/g, ''); // replace whitespaces and newline
+            // create INT array from value_from_arr
+            value_arr = value_from_arr.split(",").filter(x => x.trim().length && !isNaN(x)).map(Number)
+            // pass int array to values to be selected
+            $('#id_projectPerms').selectpicker('val', value_arr);
+          }
+        });
+      });
+    });
+    $("#id_group_to_edit").change(function () {
+      // set selected group. Is iniatlized at top for scope
+      selectedGroup = $(this).children("option:selected").val();
+      // get url
+      const url = $("#id_group_to_edit").attr("data-group-info-url");
+      $('.selectpicker').selectpicker('deselectAll', 'refresh');
+      $.ajax({
+        // initialize an AJAX request
+        url: url, // set url, is group/perm_to_group/ajax/load-group-info
+        data: {
+          group_id: selectedGroup, // add group selected to GET Parm
+        },
+        success: function (data) {
+          // `data` is the return of the `load_cities` view function
+          ajax_data = JSON.parse(JSON.stringify(data));
+          $("#id_all_perms").selectpicker('val', ajax_data.global_perms_preselect);
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

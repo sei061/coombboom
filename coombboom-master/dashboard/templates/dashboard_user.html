@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block content %}
+    <h1> Mine prosjekt</h1>
+        <div class="list-group">
+            {% for project in projects %}
+            <a href="project?id={{ project.id }}"
+                class="list-group-item list-group-item-action">{{ project.name }}</a>
+
+            {% endfor %}
+        </div>
+    <hr class="my-4 spacer-datatable">
+    <h1> Mine teams </h1>
+    <div class="list-group">
+      {% for group in groups %}
+      <a href="team?id={{ group.id }}" class="list-group-item list-group-item-action">{{ group.name }}</a>
+      {% endfor %}
+    </div>
+{% endblock %}

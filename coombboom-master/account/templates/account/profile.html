@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Coombboom - Profil</title>
+</head>
+<body>
+<h1>
+    Profil
+    <br/>
+    <br/>
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="profile_name"
+                name="profile_name"
+                required=""
+                value="Navn: {{ user.first_name }} {{ user.last_name }}"
+                disabled
+        />
+    </div>
+
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="profile_username"
+                name="profile_username"
+                required=""
+                value="Brukernavn: {{ user.username }}"
+                disabled
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="profile_email"
+                name="profile_email"
+                required=""
+                value="Epost: {{ user.email }}"
+                disabled
+        />
+    </div>
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="profile_phonenumber"
+                name="profile_phinenumber"
+                required=""
+                value="Telefonnummer: {{ user.phone_number }}"
+                disabled
+        />
+    </div>
+
+    <div class="form-group">
+        <input
+                type="text"
+                class="form-control form-control-user bg-gradient-dark-highlight"
+                id="profile_email"
+                name="profile_email"
+                required=""
+                value="Arbeidsgiver-ID: {{user.employer_id}}"
+                disabled
+        />
+    </div>
+
+    <div class="form-group-row">
+
+
+    </div>
+
+</h1>
+</body>
+</html>
+
+<div class="text-center">
+    <a class="small" href="profile_edit">Endre personalia</a>
+</div>
+
+<div class="text-center">
+    <a class="small" href="profile_changepassword">Endre passord</a>
+</div>
+{% endblock %}
